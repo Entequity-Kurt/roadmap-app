@@ -2,6 +2,9 @@ import { NextResponse } from "next/server";
 import { getDb } from "@/lib/db";
 import type { AppData } from "@/lib/types";
 
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+
 // POST /api/migrate — import existing ap-roadmap-data.json
 // Body: the raw JSON content of ap-roadmap-data.json
 export async function POST(req: Request) {

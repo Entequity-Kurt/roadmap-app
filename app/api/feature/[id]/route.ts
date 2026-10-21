@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 import { getDb } from "@/lib/db";
 
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+
 // DELETE /api/feature/[id] — remove a feature by id directly in Postgres
 export async function DELETE(
   _req: Request,
