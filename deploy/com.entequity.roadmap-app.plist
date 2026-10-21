@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  LaunchAgent template for the AP Matching Roadmap app on a Mac Mini.
+
+  launchd does not expand ~ or $HOME. Replace every YOUR_USER with the
+  macOS account name, and replace the repo path if it is not ~/roadmap-app.
+
+  Install:
+    mkdir -p ~/Library/Logs
+    cp deploy/com.entequity.roadmap-app.plist ~/Library/LaunchAgents/
+    # edit the copy, then:
+    launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.entequity.roadmap-app.plist
+
+  Logs:
+    ~/Library/Logs/roadmap-app.log
+    ~/Library/Logs/roadmap-app.err.log
+
+  The process runs `next start` with WorkingDirectory set to the repo, so
+  Next.js loads DATABASE_URL and PORT from that directory's .env.
+  Postgres is a separate service: brew services start postgresql@17.
+-->
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.entequity.roadmap-app</string>
+
+  <key>WorkingDirectory</key>
+  <string>/Users/YOUR_USER/roadmap-app</string>
+
+  <key>ProgramArguments</key>
+  <array>
+    <string>/opt/homebrew/bin/node</string>
+    <string>/Users/YOUR_USER/roadmap-app/node_modules/next/dist/bin/next</string>
+    <string>start</string>
+    <string>-H</string>
+    <string>0.0.0.0</string>
+  </array>
+
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>HOME</key>
+    <string>/Users/YOUR_USER</string>
+    <key>PATH</key>
+    <string>/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+    <key>NODE_ENV</key>
+    <string>production</string>
+  </dict>
+
+  <key>RunAtLoad</key>
+  <true/>
+
+  <key>KeepAlive</key>
+  <true/>
+
+  <key>ThrottleInterval</key>
+  <integer>10</integer>
+
+  <key>StandardOutPath</key>
+  <string>/Users/YOUR_USER/Library/Logs/roadmap-app.log</string>
+
+  <key>StandardErrorPath</key>
+  <string>/Users/YOUR_USER/Library/Logs/roadmap-app.err.log</string>
+</dict>
+</plist>

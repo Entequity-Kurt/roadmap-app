@@ -1,6 +1,8 @@
 -- ============================================================
--- AP Matching Roadmap — Neon Postgres Schema
--- Run this in the Neon SQL Editor once after creating your DB
+-- AP Matching Roadmap — Postgres schema
+-- A pg_restore of the Neon dump already creates this table.
+-- Run this file only to bootstrap an empty local database:
+--   psql -d ds_kanban -f lib/schema.sql
 -- ============================================================
 
 -- Core data store: single JSONB document (mirrors original JSON file structure)

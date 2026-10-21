@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 import { getDb } from "@/lib/db";
 
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+
 // DELETE /api/feature/[id] — remove a feature by id directly in Postgres
 export async function DELETE(
   _req: Request,
@@ -21,10 +24,13 @@ export async function DELETE(
       SET data = jsonb_set(
         data,
         '{features}',
-        (
-          SELECT jsonb_agg(f)
-          FROM jsonb_array_elements(data->'features') AS f
-          WHERE (f->>'id')::int != ${featureId}
+        COALESCE(
+          (
+            SELECT jsonb_agg(f)
+            FROM jsonb_array_elements(data->'features') AS f
+            WHERE (f->>'id')::int != ${featureId}
+          ),
+          '[]'::jsonb
         )
       ),
       updated_at = NOW()
