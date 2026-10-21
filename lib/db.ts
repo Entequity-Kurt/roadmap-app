@@ -3,6 +3,12 @@ import postgres from "postgres";
 
 type Sql = postgres.Sql;
 
+// sql.json() stringifies its argument. Pass the object, not JSON.stringify(object):
+// a string would be stored as a JSON string and the board would not load.
+export function asJson(value: unknown): postgres.JSONValue {
+  return JSON.parse(JSON.stringify(value));
+}
+
 // One pool for the life of the Node process. Next.js dev reloads this module,
 // so the pool is stored on globalThis to avoid leaking connections.
 const globalForDb = globalThis as unknown as { __roadmapSql?: Sql };

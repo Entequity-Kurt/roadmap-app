@@ -24,10 +24,13 @@ export async function DELETE(
       SET data = jsonb_set(
         data,
         '{features}',
-        (
-          SELECT jsonb_agg(f)
-          FROM jsonb_array_elements(data->'features') AS f
-          WHERE (f->>'id')::int != ${featureId}
+        COALESCE(
+          (
+            SELECT jsonb_agg(f)
+            FROM jsonb_array_elements(data->'features') AS f
+            WHERE (f->>'id')::int != ${featureId}
+          ),
+          '[]'::jsonb
         )
       ),
       updated_at = NOW()

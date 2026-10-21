@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getDb } from "@/lib/db";
+import { asJson, getDb } from "@/lib/db";
 import type { AppData } from "@/lib/types";
 
 export const runtime = "nodejs";
@@ -29,7 +29,7 @@ export async function POST(req: Request) {
 
     await sql`
       INSERT INTO app_data (id, data, updated_at)
-      VALUES (1, ${JSON.stringify(body)}::jsonb, NOW())
+      VALUES (1, ${sql.json(asJson(body))}, NOW())
       ON CONFLICT (id) DO UPDATE
         SET data = EXCLUDED.data,
             updated_at = NOW()
